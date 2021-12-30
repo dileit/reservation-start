@@ -1,20 +1,15 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { updateReservationStatus } from "../utils/api";
 import { formatAsTime } from "../utils/date-time";
 
 const ReservationList = ({ reservations }) => {
-	const history = useHistory();
-	// const [currentReservation, setCurrentReservation] = useState({});
-	// const output1 = await readReservation(value);
-	// setCurrentReservation(output1);
-
-	// const updatedReservation = output1;
-
 	// target from button / cancel reservation /refresh page
+
 	const handleCancel = async ({ target }) => {
 		const abortController = new AbortController();
 		const value = target.value;
+		console.log(value);
 
 		const result = window.confirm(
 			`Do you want to cancel this reservation? This cannot be undone.`
@@ -31,14 +26,6 @@ const ReservationList = ({ reservations }) => {
 						updatedReservation,
 						abortController.signal
 					);
-
-					// await cancelReservation(value, abortController.signal);
-					// await statusUpdate(
-					// 	value,
-					// 	{ status: "Cancelled" },
-					// 	abortController.signal
-					// );
-					history.go(0);
 				} catch (error) {
 					if (error.name === "AbortError") {
 						// Ignore `AbortError`
@@ -49,6 +36,7 @@ const ReservationList = ({ reservations }) => {
 				}
 			}
 			deleteData();
+			window.location.reload();
 			return () => {
 				abortController.abort();
 			};
@@ -77,7 +65,7 @@ const ReservationList = ({ reservations }) => {
 						Status: {reservation.status}
 					</div>{" "}
 					<br /> <br />
-					{reservation.status === "Booked" ? (
+					{reservation.status === "booked" ? (
 						<div>
 							<Link
 								to={`/reservations/${reservation.reservation_id}/seat`}
@@ -98,19 +86,15 @@ const ReservationList = ({ reservations }) => {
 								onClick={handleCancel}
 								value={reservation.reservation_id}
 								className="btn btn-danger"
+								type="button"
 							>
 								Cancel
 							</button>
 						</div>
 					) : (
-						<button
-							data-reservation-id-cancel={reservation.reservation_id}
-							onClick={handleCancel}
-							value={reservation.reservation_id}
-							className="btn btn-danger"
-						>
-							Cancel
-						</button>
+						<>
+							<td></td>
+						</>
 					)}
 				</div>
 			</div>

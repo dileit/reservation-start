@@ -6,7 +6,7 @@
  * /new - Create a new Reservation
  * Date in format YYYY-MM-DD
  * /:reservationId allows GET, PUT, DELETE
- * /:reservationId/status updates a reservation
+ * /:reservationId/status updates a reservation - PUT
  */
 
 const router = require("express").Router();
@@ -36,5 +36,3 @@ router
 	.all(methodNotAllowed);
 
 module.exports = router;
-
-// router.route("/:restaurantId/seat").all(methodNotAllowed);

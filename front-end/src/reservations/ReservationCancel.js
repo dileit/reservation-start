@@ -18,7 +18,7 @@ const ReservationCancel = ({ reservation }) => {
 		if (result) {
 			const updatedReservation = {
 				reservation_id,
-				status: "Cancelled",
+				status: "cancelled",
 			};
 
 			try {
@@ -33,7 +33,6 @@ const ReservationCancel = ({ reservation }) => {
 			}
 		}
 		return () => {
-			// console.log("cleanup post");
 			abortController.abort();
 		};
 	};

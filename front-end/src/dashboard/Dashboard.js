@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { readByDate, listTables, freeTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { previous, next, today } from "../utils/date-time";
-// import useQuery from "../utils/useQuery";
 import { Link, useParams, useHistory } from "react-router-dom";
 import ReservationList from "../reservations/ReservationList";
 import TablesList from "../tables/TablesList.js";
+import useQuery from "../utils/useQuery";
 
 /**
  * Defines the dashboard page.
@@ -24,12 +24,18 @@ function Dashboard({ date }) {
 	const [reservations, setReservations] = useState([]);
 	const [reservationsError, setReservationsError] = useState(null);
 	const [tables, setTables] = useState([]);
+	// const query = useQuery();
+	// const dateQuery = query.get("date");
+
+	// if (dateQuery) date = dateQuery;
+
+	// const dateObj = new Date(date);
+	// const dateString = dateObj.toDateString();
 
 	// list reservations
 	useEffect(loadDashboard, [date]);
 
 	function loadDashboard() {
-		// const reservation_date = date;
 		const abortController = new AbortController();
 		setReservationsError(null);
 		readByDate(date, abortController.signal)
@@ -41,7 +47,7 @@ function Dashboard({ date }) {
 		return () => abortController.abort();
 	}
 
-	// final reservation handler - processes clearing table + reserves
+	// final reservation handler - processes clearing table + reservations
 
 	const handleFinal = async ({ target }) => {
 		const abortController = new AbortController();
@@ -52,15 +58,8 @@ function Dashboard({ date }) {
 		if (result) {
 			async function deleteData() {
 				try {
-					// const activeTable = tables.filter(
-					// 	(table) => table.table_id === Number(value)
-					// );
 					await freeTable(value, abortController.signal);
-					// await statusUpdate(
-					// 	activeTable[0].reservation_id,
-					// 	{ status: "Finished" },
-					// 	abortController.signal
-					// );
+
 					const output = await listTables(abortController.signal);
 					const output2 = await readByDate(date, abortController.signal);
 					setTables(output);
@@ -78,41 +77,6 @@ function Dashboard({ date }) {
 			deleteData();
 		}
 	};
-
-	// const handleFinal = async ({ target }) => {
-	// 	const abortController = new AbortController();
-	// 	const value = target.value;
-	// 	const result = window.confirm(
-	// 		`Is this table prepped for new guests? Cannot be undone.`
-	// 	);
-	// 	if (result) {
-	// 		async function deleteData() {
-	// 			try {
-	// 				const currentTable = tables.filter(
-	// 					(table) => table.table_id === Number(value)
-	// 				);
-
-	// 				await freeTable(value, abortController.signal);
-	// 				await statusUpdate(
-	// 					currentTable[0].reservation_id,
-	// 					{ status: "Finished" },
-	// 					abortController.signal
-	// 				);
-	// 				const output = await listTables(abortController.signal);
-	// 				const output2 = await readByDate(date, abortController.signal);
-	// 				setTables(output);
-	// 				setReservations(output2);
-	// 			} catch (error) {
-	// 				if (error.name === "AbortError") {
-	// 					console.log("Aborted");
-	// 				} else {
-	// 					throw error;
-	// 				}
-	// 			}
-	// 		}
-	// 		deleteData();
-	// 	}
-	// };
 
 	return (
 		<main>

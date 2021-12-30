@@ -8,7 +8,7 @@ import Reservations from "../reservations/Reservations";
 import Tables from "../tables/Tables";
 import Search from "../search/Search";
 import ReservationSeat from "../reservations/ReservationSeat";
-// import ReservationEdit from "../reservations/ReservationEdit"
+// import useQuery from "../utils/useQuery";
 
 /**
  * Defines all the routes for the application.
@@ -18,6 +18,20 @@ import ReservationSeat from "../reservations/ReservationSeat";
  * @returns {JSX.Element}
  */
 function Routes() {
+	// const [date, setDate] = useState(today());
+	// const url = useRouteMatch();
+	// const query = useQuery();
+	// const [dashboardDate, setDashboardDate] = useState(
+	// 	useQuery().get("date") || today()
+	// );
+
+	// useEffect(loadDate, [url, query]);
+
+	// function loadDate() {
+	// 	const newDate = query.get("date");
+	// 	if (newDate) setDate(newDate);
+	// }
+
 	return (
 		<Switch>
 			<Route exact={true} path="/">

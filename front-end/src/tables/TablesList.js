@@ -17,7 +17,7 @@ const TablesList = ({ tables, handleFinal }) => {
 									</span>
 									<br />
 									<br />
-									{table.status === "Occupied" ? (
+									{table.status === "occupied" ? (
 										<button
 											data-table-id-finish={table.table_id}
 											onClick={handleFinal}

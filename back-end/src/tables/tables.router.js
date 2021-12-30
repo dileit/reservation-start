@@ -4,12 +4,10 @@
  * @type {Router}
  *
  * Routes Available
- * "/" GET: list all tables - post: add new table
- * "/:table_id" GET: read a single table, update a table, delete a table
- * "/:table_id/seat" - PUT save table assignment
+ * "/" GET: list all tables - POST: add new table
+ * "/:table_id" GET: read a single table, DELETE: delete a table
+ * "/:table_id/seat" - PUT save table assignment - DELETE - unseats a table
  *
- * The body of the request must be `{ data: { reservation_id: x } }` where X is the reservation_id of the reservation being seated. Th
- * - DELETE request to remove table assignment 400 if not occupied
  */
 
 const router = require("express").Router();

@@ -10,7 +10,7 @@ function ReservationSeat() {
 	const [reservation, setReservation] = useState([]);
 
 	const [tables, setTables] = useState([]);
-	// no table selected as default
+
 	const [seatError, setSeatError] = useState({ message: "Select a table." });
 
 	// initial state
@@ -19,7 +19,6 @@ function ReservationSeat() {
 	};
 
 	const [formData, setFormData] = useState({ ...initialState });
-	const [error, setError] = useState(null);
 
 	// load api
 
@@ -27,10 +26,10 @@ function ReservationSeat() {
 
 	function loadResAndTables() {
 		const abortController = new AbortController();
-		readReservation(reservation_id, abortController.signal)
-			.then(setReservation)
-			.catch(setError);
-		listTables(abortController.signal).then(setTables).catch(setError);
+		readReservation(reservation_id, abortController.signal).then(
+			setReservation
+		);
+		listTables(abortController.signal).then(setTables);
 
 		return () => abortController.abort();
 	}
@@ -68,7 +67,7 @@ function ReservationSeat() {
 		let value = target.value;
 		let foundTable = tables.filter((table) => table.table_id === Number(value));
 
-		// if title drop or a table w/o room - throw error
+		// If starting non-select option OR table w/o room - throw error
 		if (value === "x") {
 			setSeatError({ message: "Please select a table" });
 		} else {
@@ -80,8 +79,6 @@ function ReservationSeat() {
 		}
 		setFormData({ ...formData, [target.name]: value });
 	};
-
-	// return JSX
 
 	return (
 		<main>

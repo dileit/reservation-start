@@ -11,6 +11,7 @@ const ReservationForm = ({ formData, handleChange }) => {
 				onChange={handleChange}
 				value={formData.first_name}
 				style={{ width: "50%" }}
+				placeholder="First"
 				required
 			></input>{" "}
 			<br /> <br />
@@ -22,6 +23,7 @@ const ReservationForm = ({ formData, handleChange }) => {
 				onChange={handleChange}
 				value={formData.last_name}
 				style={{ width: "50%" }}
+				placeholder="Last"
 				required
 			></input>{" "}
 			<br /> <br />
@@ -33,6 +35,7 @@ const ReservationForm = ({ formData, handleChange }) => {
 				onChange={handleChange}
 				value={formData.mobile_number}
 				style={{ width: "50%" }}
+				placeholder="xxx-xxx-xxxx"
 				required
 			></input>{" "}
 			<br /> <br />
@@ -44,6 +47,7 @@ const ReservationForm = ({ formData, handleChange }) => {
 				onChange={handleChange}
 				value={formData.reservation_date}
 				style={{ width: "50%" }}
+				placeholder="DDMMYYY"
 				required
 			></input>{" "}
 			<br /> <br />

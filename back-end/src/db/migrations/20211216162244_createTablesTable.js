@@ -9,7 +9,7 @@ exports.up = function (knex) {
 			.references("reservation_id")
 			.inTable("reservations")
 			.onDelete("cascade");
-		table.string("status").notNullable().defaultTo("Free");
+		table.string("status").notNullable().defaultTo("free");
 		table.timestamps(true, true);
 	});
 };

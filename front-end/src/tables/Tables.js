@@ -11,9 +11,9 @@ import TablesForm from "./TablesForm";
 function Tables() {
 	// default initial state
 	const initialState = {
-		table_name: "Table Name",
-		capacity: 1,
-		status: "Free",
+		table_name: "",
+		capacity: "",
+		status: "free",
 	};
 	const [formData, setFormData] = useState({ ...initialState });
 
@@ -54,8 +54,6 @@ function Tables() {
 		setFormData({ ...formData, [target.name]: value });
 	};
 
-	// return JSX
-
 	return (
 		<main>
 			<h1>Tables</h1>
@@ -70,7 +68,11 @@ function Tables() {
 					Cancel
 				</button>{" "}
 				&nbsp;
-				<button type="submit" className="btn btn-primary">
+				<button
+					type="submit"
+					className="btn btn-primary"
+					disabled={formData.table_name.length < 2}
+				>
 					Save
 				</button>
 			</form>
