@@ -20,8 +20,8 @@ import ErrorAlert from "../layout/ErrorAlert";
 
 function Reservations({ date }) {
 	const params = useParams();
-
 	const reservation_id = params.reservation_id;
+	const history = useHistory();
 	// if this from route /reservations/:reservation_id/edit
 	// reservation_id will have a value - else undefined
 	// set initial state
@@ -62,8 +62,6 @@ function Reservations({ date }) {
 			loadData();
 		}
 	}, [reservation_id]);
-
-	const history = useHistory();
 
 	// submit handler to update
 	const handleSubmit = (formData, e) => {
@@ -138,7 +136,7 @@ function Reservations({ date }) {
 				} else {
 					await createReservation(formData, abortController.signal);
 				}
-				history.push(`/dashboard/${formData.reservation_date}`);
+				history.push(`/dashboard?date=${formData.reservation_date}`);
 			} catch (error) {
 				setErrorState(error);
 			}
@@ -177,7 +175,7 @@ function Reservations({ date }) {
 				</button>{" "}
 				&nbsp;
 				<button type="submit" className="btn btn-primary">
-					Save
+					Submit
 				</button>
 			</form>
 		</main>

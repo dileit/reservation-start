@@ -17,7 +17,7 @@ const TablesList = ({ tables, handleFinal }) => {
 									</span>
 									<br />
 									<br />
-									{table.status === "occupied" ? (
+									{table.reservation_id ? (
 										<button
 											data-table-id-finish={table.table_id}
 											onClick={handleFinal}

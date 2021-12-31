@@ -5,7 +5,7 @@ import ReservationList from "../reservations/ReservationList";
 function Search() {
 	const [reservations, setReservations] = useState([]);
 	const initialState = {
-		mobile_phone: "xxx-xxx-xxxx",
+		mobile_number: "",
 	};
 	const [formData, setFormData] = useState({ ...initialState });
 	const abortController = new AbortController();
@@ -17,7 +17,7 @@ function Search() {
 		async function updateData() {
 			try {
 				const output = await searchByPhoneNumber(
-					formData.mobile_phone,
+					formData.mobile_number,
 					abortController.signal
 				);
 				setReservations(output);
@@ -55,12 +55,13 @@ function Search() {
 			<div>
 				<form onSubmit={handleSubmit}>
 					<input
-						id="mobile_phone"
+						id="mobile_number"
 						type="text"
-						name="mobile_phone"
+						name="mobile_number"
 						onChange={handleChange}
-						value={formData.mobile_phone}
+						value={formData.mobile_number}
 						style={{ width: "150px" }}
+						placeholder="Enter a customer's phone number"
 						required
 					/>{" "}
 					&nbsp; &nbsp;
@@ -70,9 +71,15 @@ function Search() {
 				</form>
 			</div>
 			<br />
-			<div>
-				<ReservationList reservations={reservations} />
-			</div>
+			{reservations.length < 1 ? (
+				<div className="d-md-flex mb-3">
+					<h4 className="my-3">No reservations found</h4>
+				</div>
+			) : (
+				<div>
+					<ReservationList reservations={reservations} />
+				</div>
+			)}
 		</main>
 	);
 }

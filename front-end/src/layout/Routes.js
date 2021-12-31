@@ -40,9 +40,6 @@ function Routes() {
 			<Route exact={true} path="/reservations">
 				<Redirect to={"/dashboard"} />
 			</Route>
-			<Route path="/dashboard/:date">
-				<Dashboard />
-			</Route>
 			<Route path="/dashboard/">
 				<Dashboard date={today()} />
 			</Route>
@@ -69,3 +66,9 @@ function Routes() {
 }
 
 export default Routes;
+
+/* 
+			<Route path="/dashboard/:date">
+				<Dashboard />
+			</Route>
+*/

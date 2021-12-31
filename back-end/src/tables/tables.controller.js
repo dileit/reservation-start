@@ -1,8 +1,15 @@
 const tablesService = require("./tables.service");
+const resService = require("../reservations/reservations.service");
 const hasProperties = require("../errors/hasProperties");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
-const VALID_PROPERTIES = ["table_name", "capacity", "reservation_id", "status"];
+const VALID_PROPERTIES = [
+	"table_id",
+	"table_name",
+	"capacity",
+	"reservation_id",
+	"status",
+];
 
 //Validation for the request properties
 function hasOnlyValidProperties(req, res, next) {
@@ -165,6 +172,18 @@ async function destroy(req, res) {
 	res.sendStatus(204);
 }
 
+async function seat(req, res) {
+	//get variables
+	const updatedTable = {
+		...res.locals.table,
+		status: "occupied",
+		reservation_id: res.locals.reservation.reservation_id,
+	};
+	const data = await tablesService.update(updatedTable);
+	await resService.updateStatus("seated", reservationId);
+	res.status(200).json({ data: data });
+}
+
 module.exports = {
 	create: [
 		hasOnlyValidProperties,
@@ -172,15 +191,16 @@ module.exports = {
 		asyncErrorBoundary(create),
 	],
 	seat: [
-		asyncErrorBoundary(tableExists),
 		hasOnlyValidProperties,
-		hasProperties("reservation_id"),
+		asyncErrorBoundary(tableExists),
+		// hasProperties("reservation_id"),
 		asyncErrorBoundary(reservationIdExists),
 		tableHasSufficientCapacity,
 		tableIsNotOccupied,
 		reservationStatusIsNotSeated,
 		asyncErrorBoundary(updateReservationStatusToSeated),
 		asyncErrorBoundary(update),
+		// asyncErrorBoundary(seat),
 	],
 	list: [asyncErrorBoundary(list)],
 	read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],

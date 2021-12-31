@@ -173,7 +173,7 @@ async function updateReservationToCancelled(req, res, next) {
 
 // update reservation
 async function update(req, res) {
-	const updatedRes = { ...res.locals.reservation, ...res.body.data };
+	const updatedRes = { ...res.locals.reservation, ...req.body.data };
 	const data = await service.update(updatedRes);
 	res.json({ data });
 }
@@ -220,17 +220,17 @@ module.exports = {
 	],
 	read: [asyncErrorBoundary(reservationExists), read],
 	update: [
-		asyncErrorBoundary(reservationExists),
 		hasOnlyValidProperties,
-		hasRequiredProperties,
+		// hasRequiredProperties,
 		validReservation,
+		asyncErrorBoundary(reservationExists),
 		asyncErrorBoundary(update),
 	],
 	updateStatus: [
 		asyncErrorBoundary(reservationExists),
 		statusNotFinished,
-		// validStatusRequest,
-		asyncErrorBoundary(updateReservationToCancelled),
+		validStatusRequest,
+		// asyncErrorBoundary(updateReservationToCancelled),
 		asyncErrorBoundary(update),
 	],
 	delete: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(destroy)],

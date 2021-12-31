@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { updateReservationStatus } from "../utils/api";
+import { updateReservationStatus, listReservations } from "../utils/api";
 import { formatAsTime } from "../utils/date-time";
 
-const ReservationList = ({ reservations }) => {
+const ReservationList = ({ reservations, date, setReservations }) => {
 	// target from button / cancel reservation /refresh page
 	// const history = useHistory();
 
@@ -28,13 +28,18 @@ const ReservationList = ({ reservations }) => {
 						updatedReservation,
 						abortController.signal
 					);
+					const resData = await listReservations(
+						{ date },
+						abortController.signal
+					);
+					setReservations(resData);
 					// history.go(0);
 				} catch (error) {
 					console.log(error.message);
 				}
 			}
 			deleteData();
-			window.location.reload();
+			// window.location.reload();
 			return () => abortController.abort();
 		}
 	};

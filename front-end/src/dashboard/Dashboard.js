@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { readByDate, listTables, freeTable } from "../utils/api";
+import { listTables, freeTable, listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { previous, next, today } from "../utils/date-time";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ReservationList from "../reservations/ReservationList";
 import TablesList from "../tables/TablesList.js";
 import useQuery from "../utils/useQuery";
@@ -15,19 +15,20 @@ import useQuery from "../utils/useQuery";
  */
 
 function Dashboard({ date }) {
-	const params = useParams();
-	const history = useHistory();
+	// const params = useParams();
+	// const history = useHistory();
 	// format date YYYY-MM-DD
-	if (params.date) {
-		date = params.date;
-	}
+	// if (params.date) {
+	// 	date = params.date;
+	// }
 	const [reservations, setReservations] = useState([]);
 	const [reservationsError, setReservationsError] = useState(null);
 	const [tables, setTables] = useState([]);
-	// const query = useQuery();
-	// const dateQuery = query.get("date");
+	const [tablesError, setTablesError] = useState(null);
+	const query = useQuery();
+	const dateQuery = query.get("date");
 
-	// if (dateQuery) date = dateQuery;
+	if (dateQuery) date = dateQuery;
 
 	// const dateObj = new Date(date);
 	// const dateString = dateObj.toDateString();
@@ -38,12 +39,11 @@ function Dashboard({ date }) {
 	function loadDashboard() {
 		const abortController = new AbortController();
 		setReservationsError(null);
-		readByDate(date, abortController.signal)
+		setTablesError(null);
+		listReservations({ date }, abortController.signal)
 			.then(setReservations)
 			.catch(setReservationsError);
-		listTables(abortController.signal)
-			.then(setTables)
-			.catch(setReservationsError);
+		listTables(abortController.signal).then(setTables).catch(setTablesError);
 		return () => abortController.abort();
 	}
 
@@ -53,18 +53,21 @@ function Dashboard({ date }) {
 		const abortController = new AbortController();
 		const value = target.value;
 		const result = window.confirm(
-			`Is this table prepped for new guests? Cannot be undone.`
+			"Is this table ready to seat new guests? This cannot be undone."
 		);
 		if (result) {
 			async function deleteData() {
 				try {
 					await freeTable(value, abortController.signal);
 
-					const output = await listTables(abortController.signal);
-					const output2 = await readByDate(date, abortController.signal);
-					setTables(output);
-					setReservations(output2);
-					history.push("/dashboard/");
+					// const output = await listTables(abortController.signal);
+					// const output2 = await listReservations(
+					// 	{ date },
+					// 	abortController.signal
+					// );
+					// setTables(output);
+					// setReservations(output2);
+					// history.go(0);
 				} catch (error) {
 					if (error.name === "AbortError") {
 						// Ignore `AbortError`
@@ -75,6 +78,8 @@ function Dashboard({ date }) {
 				}
 			}
 			deleteData();
+			window.location.reload();
+			return () => abortController.abort();
 		}
 	};
 
@@ -85,15 +90,15 @@ function Dashboard({ date }) {
 				<h4 className="mb-0">Reservations for {date}</h4>
 			</div>
 			<div>
-				<Link to={`/dashboard/${previous(date)}`} className="btn btn-dark">
+				<Link to={`/dashboard?date=${previous(date)}`} className="btn btn-dark">
 					Previous
 				</Link>{" "}
 				&nbsp;
-				<Link to={`/dashboard/${next(date)}`} className="btn btn-dark">
+				<Link to={`/dashboard?date=${next(date)}`} className="btn btn-dark">
 					Next
 				</Link>{" "}
 				&nbsp;
-				<Link to={`/dashboard/${today()}`} className="btn btn-success">
+				<Link to={`/dashboard?date=${today()}`} className="btn btn-success">
 					Today
 				</Link>
 			</div>
@@ -106,6 +111,7 @@ function Dashboard({ date }) {
 				<TablesList tables={tables} handleFinal={handleFinal} />
 			</div>
 			<ErrorAlert error={reservationsError} />
+			<ErrorAlert error={tablesError} />
 		</main>
 	);
 }
