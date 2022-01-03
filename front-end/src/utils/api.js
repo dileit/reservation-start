@@ -5,7 +5,7 @@
 import formatReservationDate from "./format-reservation-date";
 import formatReservationTime from "./format-reservation-date";
 
-const API_BASE_URL = "http://localhost:5000";
+const API_BASE_URL = "https://reservation-start-backend.vercel.app/";
 
 /**
  * Defines the default headers for these functions to work with `json-server`
