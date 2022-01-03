@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { listTables, freeTable, listReservations } from "../utils/api";
-import ErrorAlert from "../layout/ErrorAlert";
-import { previous, next, today } from "../utils/date-time";
 import { Link } from "react-router-dom";
+import { listTables, listReservations } from "../utils/api";
+import { previous, next, today } from "../utils/date-time";
+import ErrorAlert from "../layout/ErrorAlert";
 import ReservationList from "../reservations/ReservationList";
 import TablesList from "../tables/TablesList.js";
 import useQuery from "../utils/useQuery";
@@ -15,12 +15,6 @@ import useQuery from "../utils/useQuery";
  */
 
 function Dashboard({ date }) {
-	// const params = useParams();
-	// const history = useHistory();
-	// format date YYYY-MM-DD
-	// if (params.date) {
-	// 	date = params.date;
-	// }
 	const [reservations, setReservations] = useState([]);
 	const [reservationsError, setReservationsError] = useState(null);
 	const [tables, setTables] = useState([]);
@@ -30,58 +24,46 @@ function Dashboard({ date }) {
 
 	if (dateQuery) date = dateQuery;
 
-	// const dateObj = new Date(date);
-	// const dateString = dateObj.toDateString();
-
-	// list reservations
-	useEffect(loadDashboard, [date]);
-
-	function loadDashboard() {
+	// loads reservations
+	useEffect(() => {
 		const abortController = new AbortController();
-		setReservationsError(null);
-		setTablesError(null);
-		listReservations({ date }, abortController.signal)
-			.then(setReservations)
-			.catch(setReservationsError);
-		listTables(abortController.signal).then(setTables).catch(setTablesError);
-		return () => abortController.abort();
-	}
 
-	// final reservation handler - processes clearing table + reservations
-
-	const handleFinal = async ({ target }) => {
-		const abortController = new AbortController();
-		const value = target.value;
-		const result = window.confirm(
-			"Is this table ready to seat new guests? This cannot be undone."
-		);
-		if (result) {
-			async function deleteData() {
-				try {
-					await freeTable(value, abortController.signal);
-
-					// const output = await listTables(abortController.signal);
-					// const output2 = await listReservations(
-					// 	{ date },
-					// 	abortController.signal
-					// );
-					// setTables(output);
-					// setReservations(output2);
-					// history.go(0);
-				} catch (error) {
-					if (error.name === "AbortError") {
-						// Ignore `AbortError`
-						console.log("Aborted");
-					} else {
-						throw error;
-					}
-				}
+		async function loadReservations() {
+			setReservationsError(null);
+			try {
+				const data = await listReservations({ date }, abortController.signal);
+				setReservations(data);
+			} catch (error) {
+				setReservationsError(error);
 			}
-			deleteData();
-			window.location.reload();
-			return () => abortController.abort();
 		}
-	};
+		loadReservations();
+		return () => abortController.abort();
+	}, [date]);
+
+	// loads all tables
+	useEffect(() => {
+		const abortController = new AbortController();
+
+		async function loadTables() {
+			setReservationsError(null);
+			try {
+				const data = await listTables(abortController.signal);
+				setTables(data);
+			} catch (error) {
+				setTablesError(error);
+			}
+		}
+
+		loadTables();
+
+		return () => abortController.abort();
+	}, []);
+
+	// Filtering for reservations that are booked/seated.
+	const bookedAndSeated = reservations.filter(
+		(reservation) => reservation.status !== "finished"
+	);
 
 	return (
 		<main>
@@ -104,11 +86,11 @@ function Dashboard({ date }) {
 			</div>
 			<br />
 			<div>
-				<ReservationList reservations={reservations} />
+				<ReservationList reservations={bookedAndSeated} />
 			</div>
 			<h4 className="mb-0">Tables:</h4> <br />
 			<div>
-				<TablesList tables={tables} handleFinal={handleFinal} />
+				<TablesList tables={tables} />
 			</div>
 			<ErrorAlert error={reservationsError} />
 			<ErrorAlert error={tablesError} />

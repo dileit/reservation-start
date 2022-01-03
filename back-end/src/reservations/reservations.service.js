@@ -1,17 +1,16 @@
 const knex = require("../db/connection");
 
-const list = () => {
+function list() {
 	return knex("reservations").select("*").orderBy("reservation_date");
-};
+}
 
-const listByDate = (date) => {
+function listByDate(date) {
 	return knex("reservations")
 		.select("*")
 		.where({ reservation_date: date })
-		.whereNot({ status: "finished" })
-		.whereNot({ status: "cancelled" })
-		.orderBy("reservation_time", "asc");
-};
+		.whereNot("status", "finished")
+		.orderBy("reservation_time");
+}
 
 function listByMobileNumber(mobile_number) {
 	return knex("reservations")
@@ -23,45 +22,28 @@ function listByMobileNumber(mobile_number) {
 		.orderBy("reservation_date");
 }
 
-// create
-const create = (reservation) => {
+function create(reservation) {
 	return knex("reservations")
 		.insert(reservation)
 		.returning("*")
 		.then((createdRecords) => createdRecords[0]);
-};
+}
 
-const read = (reservation_id) => {
+function read(reservation_id) {
 	return knex("reservations").select("*").where({ reservation_id }).first();
-};
+}
 
-const update = (updatedRes) => {
-	return knex("reservations")
-		.select("*")
-		.where({ reservation_id: updatedRes.reservation_id })
-		.update(updatedRes, "*")
-		.then((updatedRecords) => updatedRecords[0]);
-};
-
-function updateReservationStatus(updatedReservation) {
+function update(updatedReservation) {
 	return knex("reservations")
 		.select("*")
 		.where({ reservation_id: updatedReservation.reservation_id })
-		.update({ status: updatedReservation.status })
+		.update(updatedReservation, "*")
 		.then((updatedRecords) => updatedRecords[0]);
 }
 
-function updateStatus(status, reservationId) {
-	return knex("reservations")
-		.where({ reservation_id: reservationId })
-		.update("status", status)
-		.returning("*")
-		.then((records) => records[0]);
-}
-
-const destroy = (reservation_id) => {
+function destroy(reservation_id) {
 	return knex("reservations").where({ reservation_id }).del();
-};
+}
 
 module.exports = {
 	list,
@@ -70,7 +52,5 @@ module.exports = {
 	create,
 	read,
 	update,
-	updateStatus,
-	updateReservationStatus,
-	delete: [destroy],
+	delete: destroy,
 };

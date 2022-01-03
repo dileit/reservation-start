@@ -1,52 +1,50 @@
-import React from "react";
 import { useHistory } from "react-router-dom";
-import { updateResStatus } from "../utils/api";
+import { updateReservationStatus } from "../utils/api";
 
-// updates status of a reservation - "Cancelled"
+// Updates the `status` of a reservation to "cancelled"
 
-const ReservationCancel = ({ reservation }) => {
+function ReservationCancel({ reservation }) {
 	const history = useHistory();
-	const { reservation_id } = reservation;
+	const { reservation_id, reservation_date } = reservation;
 
-	const handleCancel = async () => {
+	async function handleCancel() {
 		const abortController = new AbortController();
-		const result = window.confirm(
-			`Do you want to cancel this reservation? This cannot be undone.`
+		const cancelReservation = window.confirm(
+			"Do you want to cancel this reservation? This cannot be undone."
 		);
 
-		// if they do want to cancel - confirm
-		if (result) {
-			const updatedReservation = {
-				reservation_id,
-				status: "cancelled",
-			};
+		if (!cancelReservation)
+			return history.push(`/dashboard?date=${reservation_date}`);
 
-			try {
-				await updateResStatus(updatedReservation, abortController.signal);
-				history.go(0);
-			} catch (error) {
-				if (error.name === "AbortError") {
-					console.log("Aborted");
-				} else {
-					throw error;
-				}
+		const updatedReservation = {
+			reservation_id,
+			status: "cancelled",
+		};
+		try {
+			await updateReservationStatus(updatedReservation, abortController.signal);
+		} catch (error) {
+			if (error.name === "AbortError") {
+				console.log("Aborted");
+			} else {
+				throw error;
 			}
 		}
-		return () => {
-			abortController.abort();
-		};
-	};
+
+		window.location.reload();
+
+		return () => abortController.abort();
+	}
+
 	return (
 		<button
 			type="button"
+			className="btn btn-danger"
 			data-reservation-id-cancel={reservation_id}
 			onClick={() => handleCancel()}
-			value={reservation_id}
-			className="btn btn-danger"
 		>
 			Cancel
 		</button>
 	);
-};
+}
 
 export default ReservationCancel;

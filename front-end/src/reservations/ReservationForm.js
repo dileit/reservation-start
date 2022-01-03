@@ -1,80 +1,143 @@
-import React from "react";
+import { useHistory } from "react-router";
+import ErrorAlert from "../layout/ErrorAlert";
 
-const ReservationForm = ({ formData, handleChange }) => {
+// Defines the reservation form
+
+function ReservationForm({ formData, setFormData, submitHandler, error }) {
+	const history = useHistory();
+	const cancelClickHandler = () => history.goBack();
+	// change handlers
+	const handleChange = ({ target }) => {
+		let value = target.value;
+		setFormData({ ...formData, [target.name]: value });
+	};
+
 	return (
-		<div>
-			<label>First Name:</label> <br />
-			<input
-				id="first_name"
-				type="text"
-				name="first_name"
-				onChange={handleChange}
-				value={formData.first_name}
-				style={{ width: "50%" }}
-				placeholder="First"
-				required
-			></input>{" "}
-			<br /> <br />
-			<label>Last Name:</label> <br />
-			<input
-				id="last_name"
-				type="text"
-				name="last_name"
-				onChange={handleChange}
-				value={formData.last_name}
-				style={{ width: "50%" }}
-				placeholder="Last"
-				required
-			></input>{" "}
-			<br /> <br />
-			<label>Mobile Number:</label> <br />
-			<input
-				id="mobile_number"
-				type="text"
-				name="mobile_number"
-				onChange={handleChange}
-				value={formData.mobile_number}
-				style={{ width: "50%" }}
-				placeholder="xxx-xxx-xxxx"
-				required
-			></input>{" "}
-			<br /> <br />
-			<label>Date of Reservation:</label> <br />
-			<input
-				id="reservation_date"
-				type="date"
-				name="reservation_date"
-				onChange={handleChange}
-				value={formData.reservation_date}
-				style={{ width: "50%" }}
-				placeholder="DDMMYYY"
-				required
-			></input>{" "}
-			<br /> <br />
-			<label>Time of Reservation:</label> <br />
-			<input
-				id="reservation_time"
-				type="time"
-				name="reservation_time"
-				onChange={handleChange}
-				value={formData.reservation_time}
-				style={{ width: "50%" }}
-				required
-			></input>{" "}
-			<br /> <br />
-			<label>Number of people in the party (must be at least 1):</label> <br />
-			<input
-				id="people"
-				type="number"
-				name="people"
-				onChange={handleChange}
-				value={formData.people}
-				style={{ width: "50%" }}
-				required
-			></input>{" "}
-			<br /> <br />
-		</div>
+		<>
+			<ErrorAlert error={error} />
+			<form onSubmit={submitHandler}>
+				<div className="row mb-3">
+					<div className="col-4 form-group">
+						<label className="form-label" htmlFor="first_name">
+							First Name
+						</label>
+						<input
+							className="form-control"
+							id="first_name"
+							name="first_name"
+							type="text"
+							onChange={handleChange}
+							required={true}
+							value={formData.first_name}
+						/>
+						<small className="form-text text-muted"> Enter First Name </small>
+					</div>
+					<div className="col-4">
+						<label className="form-label" htmlFor="last_name">
+							Last Name
+						</label>
+						<input
+							className="form-control"
+							id="last_name"
+							name="last_name"
+							type="text"
+							onChange={handleChange}
+							required={true}
+							value={formData.last_name}
+						/>
+						<small className="form-text text-muted"> Enter Last Name </small>
+					</div>
+				</div>
+				<div className="row mb-3">
+					<div className="col-4 form-group">
+						<label className="form-label" htmlFor="mobile_number">
+							Mobile Number
+						</label>
+						<input
+							className="form-control"
+							id="mobile_number"
+							name="mobile_number"
+							type="text"
+							onChange={handleChange}
+							required={true}
+							placeholder="0000000000"
+							value={formData.mobile_number}
+						/>
+						<small className="form-text text-muted">
+							{" "}
+							Enter Mobile Number (ex: 0000000000){" "}
+						</small>
+					</div>
+					<div className="col-4 form-group">
+						<label className="form-label" htmlFor="mobile_number">
+							Party Size
+						</label>
+						<input
+							className="form-control"
+							id="people"
+							name="people"
+							type="number"
+							onChange={handleChange}
+							required={true}
+							value={formData.people}
+						/>
+						<small className="form-text text-muted"> Enter Party Size </small>
+					</div>
+				</div>
+				<div className="row mb-3">
+					<div className="col-4 form-group">
+						<label>Reservation Date</label>
+						<input
+							className="form-control"
+							id="reservation_date"
+							name="reservation_date"
+							type="text"
+							onChange={handleChange}
+							required={true}
+							placeholder="DDMMYYYY"
+							value={formData.reservation_date}
+						/>
+						<small className="form-text text-muted">
+							{" "}
+							Enter Reservation Date (ex: DDMMYYYY){" "}
+						</small>
+						<small className="form-text text-muted">
+							(Closed on Tuesdays){" "}
+						</small>
+					</div>
+					<div className="col-4 form-group">
+						<label>Reservation Time</label>
+						<input
+							className="form-control"
+							id="reservation_time"
+							name="reservation_time"
+							type="time"
+							onChange={handleChange}
+							required={true}
+							placeholder="reservation time"
+							value={formData.reservation_time}
+						/>
+						<small className="form-text text-muted">
+							{" "}
+							Enter Reservation Time{" "}
+						</small>
+					</div>
+				</div>
+				<button type="submit" className="btn btn-success mx-3">
+					{" "}
+					Submit
+				</button>
+				<button
+					type="button"
+					className="btn btn-dark"
+					onClick={cancelClickHandler}
+				>
+					{" "}
+					Cancel{" "}
+				</button>
+			</form>
+		</>
 	);
-};
+}
 
 export default ReservationForm;

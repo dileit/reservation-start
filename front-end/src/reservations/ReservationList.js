@@ -1,44 +1,7 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import { updateReservationStatus } from "../utils/api";
-import { formatAsTime } from "../utils/date-time";
+import ReservationCancel from "./ReservationCancel";
 
-const ReservationList = ({ reservations }) => {
-	// target from button / cancel reservation /refresh page
-	// const history = useHistory();
-
-	const handleCancel = async ({ target }) => {
-		const abortController = new AbortController();
-		const value = target.value;
-
-		// console.log(value);
-
-		const result = window.confirm(
-			`Do you want to cancel this reservation? This cannot be undone.`
-		);
-		const updatedReservation = {
-			reservation_id: value,
-			status: "cancelled",
-		};
-
-		if (result) {
-			async function deleteData() {
-				try {
-					await updateReservationStatus(
-						updatedReservation,
-						abortController.signal
-					);
-					// history.go(0);
-				} catch (error) {
-					console.log(error.message);
-				}
-			}
-			deleteData();
-			window.location.reload();
-			return () => abortController.abort();
-		}
-	};
-
+const ReservationList = ({ reservations = [] }) => {
 	const list = reservations.map((reservation) => (
 		<div className="col-sm-6" key={reservation.reservation_id}>
 			<div className="card text-white bg-dark mb-3">
@@ -48,9 +11,7 @@ const ReservationList = ({ reservations }) => {
 					</h4>
 				</div>
 				<div className="card-body">
-					<h5 className="card-title">
-						Time: {formatAsTime(reservation.reservation_time)}
-					</h5>
+					<h5 className="card-title">Time: {reservation.reservation_time}</h5>
 					<p className="card-text">
 						Date: {reservation.reservation_date} <br />
 						Phone Number: {reservation.mobile_number}
@@ -61,6 +22,7 @@ const ReservationList = ({ reservations }) => {
 						Status: {reservation.status}
 					</div>{" "}
 					<br /> <br />
+					{/* If status is booked, display these buttons*/}
 					{reservation.status === "booked" ? (
 						<div>
 							<Link
@@ -76,19 +38,11 @@ const ReservationList = ({ reservations }) => {
 							>
 								Edit
 							</Link>{" "}
-							&nbsp;
-							<button
-								data-reservation-id-cancel={reservation.reservation_id}
-								onClick={handleCancel}
-								value={reservation.reservation_id}
-								className="btn btn-danger"
-								type="button"
-							>
-								Cancel
-							</button>
+							{/* &nbsp; */}
+							<ReservationCancel reservation={reservation} />
 						</div>
 					) : (
-						<></>
+						""
 					)}
 				</div>
 			</div>

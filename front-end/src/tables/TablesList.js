@@ -1,6 +1,7 @@
 import React from "react";
+import FinishTable from "./FinishTable";
 
-const TablesList = ({ tables, handleFinal }) => {
+const TablesList = ({ tables = [] }) => {
 	// only display if present
 	if (tables.length > 0) {
 		return (
@@ -13,21 +14,12 @@ const TablesList = ({ tables, handleFinal }) => {
 								<p className="card-text">
 									Table Capacity: {table.capacity} <br /> Status:{" "}
 									<span data-table-id-status={table.table_id}>
-										{table.status}
+										{table.reservation_id ? "occupied" : "free"}
 									</span>
 									<br />
 									<br />
-									{table.reservation_id ? (
-										<button
-											data-table-id-finish={table.table_id}
-											onClick={handleFinal}
-											value={table.table_id}
-											className="btn btn-success"
-										>
-											Finish
-										</button>
-									) : (
-										""
+									{table.reservation_id && (
+										<FinishTable table_id={table.table_id} />
 									)}
 								</p>
 							</div>

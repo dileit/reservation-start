@@ -5,7 +5,7 @@
  *
  * Routes Available
  * "/" GET: list all tables - POST: add new table
- * "/:table_id" GET: read a single table, DELETE: delete a table
+ * "/:table_id" GET: read a single table
  * "/:table_id/seat" - PUT save table assignment - DELETE - unseats a table
  *
  */
@@ -20,16 +20,12 @@ router
 	.post(controller.create)
 	.all(methodNotAllowed);
 
-router
-	.route("/:table_id")
-	.get(controller.read)
-	.delete(controller.delete)
-	.all(methodNotAllowed);
+router.route("/:table_id").get(controller.read).all(methodNotAllowed);
 
 router
 	.route("/:table_id/seat")
-	.put(controller.seat)
-	.delete(controller.unseat)
+	.put(controller.update)
+	.delete(controller.deleteReservationId)
 	.all(methodNotAllowed);
 
 module.exports = router;
