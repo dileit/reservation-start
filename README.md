@@ -12,32 +12,32 @@ This fullstack project manages reservations for a restaurant. This includes: cre
 
 ## Deployed
 
-This application is deployed at .
+This application is deployed at https://reservation-start.vercel.app/dashboard
 
 ### Features
 
 - Dashboard View for a chosen date. Today is the default
 
-![DashboardView](./images/Dashboard-View.png)
+![Dashboard-View](./images/Dashboard-View.png)
 
 - Lookup reservations by mobile number
 
-![SearchView](./images/Search-View.png)
+![Search-View](./images/Search-View.png)
 
 - Create or Edit a Reservation
 
-![ReservationFormView](./images/Reservation-Form-View.png)
+![Reservation-Form-View](./images/Reservation-Form-View.png)
 
 - Create a Table
 
-![TableFormView](./images/Table-Form-View.png)
+![Table-Form-View](./images/Table-Form-View.png)
 
 - Seat reservations at a table
 
-![SeatView](./images/Seat-View.png)
+![Seat-View](./images/Seat-View.png)
 
-![SeatedTable](./images/Seated-Table.png)
+![Seated-Table](./images/Seated-Table.png)
 
 - Cancel a Reservation
 
-![CancelRes](./images/Cancel-Res.png)
+![Cancel-Res](./images/Cancel-Res.png)
