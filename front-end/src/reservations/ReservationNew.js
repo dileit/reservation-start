@@ -23,11 +23,9 @@ function ReservationNew() {
 	async function submitHandler(event) {
 		event.preventDefault();
 		const abortController = new AbortController();
-		const formattedDate = formatDate();
 		const formattedTime = formatTime();
 
 		try {
-			formData.reservation_date = formattedDate;
 			formData.reservation_time = formattedTime;
 			formData.people = Number(formData.people);
 			await createReservation(formData, abortController.signal);
@@ -36,19 +34,8 @@ function ReservationNew() {
 			return;
 		}
 
-		history.push(`/dashboard?date=${formattedDate}`);
+		history.push(`/dashboard?date=${formData.reservation_date}`);
 		return () => abortController.abort();
-	}
-
-	// formats date
-	function formatDate() {
-		return `${formData.reservation_date.substring(
-			4,
-			8
-		)}-${formData.reservation_date.substring(
-			0,
-			2
-		)}-${formData.reservation_date.substring(2, 4)}`;
 	}
 
 	// reformat possible date input that includes `pm`

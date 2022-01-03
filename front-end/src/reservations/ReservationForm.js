@@ -91,15 +91,15 @@ function ReservationForm({ formData, setFormData, submitHandler, error }) {
 							className="form-control"
 							id="reservation_date"
 							name="reservation_date"
-							type="text"
+							type="date"
 							onChange={handleChange}
 							required={true}
-							placeholder="DDMMYYYY"
 							value={formData.reservation_date}
+							placeholder="DDMMYYY"
 						/>
 						<small className="form-text text-muted">
 							{" "}
-							Enter Reservation Date (ex: DDMMYYYY){" "}
+							Enter Reservation Date (ex: MM/DD/YYYY){" "}
 						</small>
 						<small className="form-text text-muted">
 							(Closed on Tuesdays){" "}

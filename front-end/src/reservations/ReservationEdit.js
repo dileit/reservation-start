@@ -31,7 +31,6 @@ function ReservationEdit() {
 					reservation_id,
 					abortController.signal
 				);
-				data.reservation_date = formatDateToMMDDYYYY(data.reservation_date);
 				setFormData(data);
 			} catch (error) {
 				return <ErrorAlert error={error} />;
@@ -49,11 +48,9 @@ function ReservationEdit() {
 		event.preventDefault();
 		const abortController = new AbortController();
 
-		const formattedDate = formatDate();
 		const formattedTime = formatTime();
 
 		try {
-			formData.reservation_date = formattedDate;
 			formData.reservation_time = formattedTime;
 			formData.people = Number(formData.people);
 			await updateReservation(formData, abortController.signal);
@@ -62,27 +59,8 @@ function ReservationEdit() {
 			return;
 		}
 
-		history.push(`/dashboard?date=${formattedDate}`);
+		history.push(`/dashboard?date=${formData.reservation_date}`);
 		return () => abortController.abort();
-	}
-
-	// formats the date to MMDDYYYY
-	function formatDateToMMDDYYYY(originalDate) {
-		const date = originalDate.replace(/[\s-]/g, "");
-		return `${date.substring(4, 6)}${date.substring(6, 8)}${date.substring(
-			0,
-			4
-		)}`;
-	}
-
-	function formatDate() {
-		return `${formData.reservation_date.substring(
-			4,
-			8
-		)}-${formData.reservation_date.substring(
-			0,
-			2
-		)}-${formData.reservation_date.substring(2, 4)}`;
 	}
 
 	// reformats time input that includes `pm`
