@@ -18,26 +18,26 @@ This application is deployed at https://reservation-start.vercel.app/dashboard
 
 - Dashboard View for a chosen date. Today is the default
 
-![Dashboard](/images/dashboardview.png)
+![Dashboard](/images/dashboardview.PNG)
 
 - Lookup reservations by mobile number
 
-![SearchView](/images/searchview.png)
+![SearchView](/images/searchview.PNG)
 
 - Create or Edit a Reservation
 
-![ReservationFormView](/images/reservationform.png)
+![ReservationFormView](/images/reservationform.PNG)
 
 - Create a Table
 
-![TableFormView](/images/tableform.png)
+![TableFormView](/images/tableform.PNG)
 
 - Seat reservations at a table
 
-![SeatView](/images/seatview.png)
+![SeatView](/images/seatview.PNG)
 
-![SeatedTable](/images/seattable.png)
+![SeatedTable](/images/seattable.PNG)
 
 - Cancel a Reservation
 
-![CancelRes](/images/cancel.png)
+![CancelRes](/images/cancel.PNG)
